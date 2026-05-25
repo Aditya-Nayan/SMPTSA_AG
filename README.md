@@ -9,14 +9,6 @@ This Project pulls live data from social media (Twitter/Reddit), financial news,
 -compare their prediction accuracy against real gold prices
 -Serve predictions through a live dashboard with real-time buy/sell signal
 
-Edited walkthrough.md
-
-Done! The **complete project summary** is in the walkthrough above. Here's a quick overview of what it covers:
-
-Edited walkthrough.md
-
-Done! The **complete project summary** is in the walkthrough above. Here's a quick overview of what it covers:
-
 | Section | Highlights |
 |---|---|
 | **Frontend** | React 18, TypeScript, Vite 8, Recharts, WebSocket |
@@ -29,14 +21,6 @@ Done! The **complete project summary** is in the walkthrough above. Here's a qui
 | **Deployment** | Vercel (frontend) + Render (backend) + GitHub |
 | **Architecture** | Full Mermaid diagram showing all service connections |
 
-# Tech Stack
-*Java* - Spring Boot for data ingestion pipelines and REST/WebSocket backend API
-*Python* - scikit-learn, FinBERT, VADER for ML and NLP
-*FastAPI* - serves ML model predictions as a microservice
-*React* - live interactive dashboard
-*PostgreSQL* - stores price history
-*Apache Kafka* - real-time data streaming between services
-*Redis* - caches live predictions
 
 # SMPTSA — Complete Project Summary
 
