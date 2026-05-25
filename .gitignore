@@ -1,0 +1,46 @@
+# SMPTSA — .gitignore
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# ── ML artifacts ──
+ml_service/models/*.joblib
+ml_service/models/*.pkl
+ml_service/plots/
+
+# ── Environment ──
+.env
+
+# ── Java / Maven ──
+backend/**/target/
+backend/**/.mvn/
+*.class
+*.jar
+*.war
+
+# ── Node / React ──
+frontend/node_modules/
+frontend/dist/
+
+# ── IDE ──
+.idea/
+.vscode/
+*.iml
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+
+# ── Docker volumes ──
+pgdata/
+redisdata/
+kafkadata/
+esdata/

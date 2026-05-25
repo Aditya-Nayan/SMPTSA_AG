@@ -1,0 +1,54 @@
+# ─── SMPTSA API Gateway ───
+
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: smptsa-api-gateway
+
+  # ── PostgreSQL ──
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:smptsa_db}
+    username: ${DB_USER:smptsa}
+    password: ${DB_PASSWORD:smptsa_secret}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  # ── Kafka ──
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9094}
+    consumer:
+      group-id: api-gateway-group
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+  # ── Redis ──
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+# ── JWT ──
+jwt:
+  secret: ${JWT_SECRET:your-256-bit-secret-key-for-jwt-signing-change-me}
+  expiration-ms: 86400000  # 24 hours
+
+# ── FastAPI ML service ──
+ml-service:
+  base-url: ${ML_SERVICE_URL:http://localhost:8000}
+
+# ── WebSocket push interval ──
+websocket:
+  push-interval-ms: 30000  # 30 seconds
+
+logging:
+  level:
+    com.smptsa: DEBUG
