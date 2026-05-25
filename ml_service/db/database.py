@@ -8,13 +8,16 @@ from dotenv import load_dotenv;
 
 load_dotenv()
 
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "5432")
-DB_NAME = os.getenv("DB_NAME", "smptsa_db")
-DB_USER = os.getenv("DB_USER", "smptsa")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "smptsa_secret")
+# Railway provides DATABASE_URL directly; fall back to individual vars for local dev
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+if not DATABASE_URL:
+    DB_HOST = os.getenv("DB_HOST", "localhost")
+    DB_PORT = os.getenv("DB_PORT", "5432")
+    DB_NAME = os.getenv("DB_NAME", "smptsa_db")
+    DB_USER = os.getenv("DB_USER", "smptsa")
+    DB_PASSWORD = os.getenv("DB_PASSWORD", "smptsa_secret")
+    DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 engine = create_engine(DATABASE_URL, pool_size=10, max_overflow=20)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
