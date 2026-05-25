@@ -1,0 +1,66 @@
+# render.yaml — Render.com Blueprint for SMPTSA Backend Services
+# Deploy all backends with one click: https://render.com/deploy
+
+services:
+  # ─── ML Service (Python FastAPI) ───
+  - type: web
+    name: smptsa-ml-service
+    runtime: python
+    region: oregon
+    plan: free
+    rootDir: ml_service
+    buildCommand: |
+      pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu &&
+      pip install -r requirements.txt
+    startCommand: uvicorn ml_service.app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: smptsa-db
+          property: connectionURI
+      - key: REDIS_HOST
+        value: ""
+      - key: REDIS_PORT
+        value: "6379"
+
+  # ─── API Gateway (Spring Boot) ───
+  - type: web
+    name: smptsa-api-gateway
+    runtime: docker
+    region: oregon
+    plan: free
+    dockerfilePath: ./backend/api-gateway/Dockerfile
+    dockerContext: ./backend/api-gateway
+    envVars:
+      - key: PORT
+        value: "8080"
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: smptsa-db
+          property: connectionURI
+        # Render gives postgresql:// but Spring needs jdbc:postgresql://
+        # We handle this via a wrapper — see below
+      - key: DB_USER
+        fromDatabase:
+          name: smptsa-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: smptsa-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ML_SERVICE_URL
+        value: "https://smptsa-ml-service.onrender.com"
+      - key: REDIS_HOST
+        value: ""
+      - key: REDIS_PORT
+        value: "6379"
+
+databases:
+  - name: smptsa-db
+    plan: free
+    databaseName: smptsa_db
+    user: smptsa

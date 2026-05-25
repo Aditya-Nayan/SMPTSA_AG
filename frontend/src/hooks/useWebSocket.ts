@@ -13,7 +13,8 @@ interface UseWebSocketReturn {
   reconnect: () => void;
 }
 
-const WS_URL = `ws://${window.location.host}/ws/live-prediction`;
+const WS_PROTOCOL = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+const WS_URL = `${WS_PROTOCOL}//${window.location.host}/ws/live-prediction`;
 const MAX_RETRIES = 10;
 const BASE_DELAY_MS = 1000;
 
